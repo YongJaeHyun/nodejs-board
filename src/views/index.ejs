@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>사람 정보 관리</title>
+    <style>
+      table,
+      tr,
+      td {
+        text-align: center;
+      }
+
+      table {
+        width: 30%;
+        border: 1px solid #e1e1e1;
+        border-collapse: collapse;
+      }
+      tr {
+        height: 50px;
+      }
+      img {
+        width: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>사람 정보 관리</h1>
+    <h2>정보 입력</h2>
+    <table border="1">
+      <form action="/fileUpload" method="post" enctype="multipart/form-data">
+        <tr>
+          <td>아이디</td>
+          <td>
+            <input
+              type="text"
+              name="id"
+              minlength="2"
+              maxlength="10"
+              required
+            />
+          </td>
+          <td rowspan="4">
+            <div>
+              <img
+                id="preview"
+                src=""
+                alt="image"
+                onerror="this.style.display='none'"
+              />
+              <p>사진 미리보기</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>성명</td>
+          <td>
+            <input
+              type="text"
+              name="name"
+              minlength="2"
+              maxlength="10"
+              required
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>이메일</td>
+          <td>
+            <input type="email" name="email" minlength="5" required />
+          </td>
+        </tr>
+        <tr>
+          <td>사진</td>
+          <td>
+            <input type="file" name="img" accept=".jpg, .png" required />
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3"><button type="submit">저장</button></td>
+        </tr>
+      </form>
+    </table>
+    <h2>사람 목록</h2>
+    <table border="1">
+      <tr>
+        <td>번호</td>
+        <td>아이디</td>
+        <td>성명</td>
+        <td>이메일</td>
+        <td>사진</td>
+      </tr>
+      <% for(pData of pList){ %>
+      <tr>
+        <td><%=pData.no %></td>
+        <td><%=pData.id %></td>
+        <td><%=pData.name %></td>
+        <td><%=pData.email %></td>
+        <td><img src="<%=pData.img %>" alt="img" /></td>
+      </tr>
+      <%} %>
+    </table>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script>
+      const previewBtn = $("input[name=img]");
+
+      function setPreview(e) {
+        const preview = $("img#preview");
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        if (file) {
+          reader.readAsDataURL(file);
+          preview.attr("style", "display: inline;");
+        } else {
+          preview.attr("src", "");
+        }
+        reader.onloadend = () => {
+          preview.attr("src", reader.result);
+        };
+      }
+
+      previewBtn.change(setPreview);
+    </script>
+  </body>
+</html>
